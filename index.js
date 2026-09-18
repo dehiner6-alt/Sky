@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const express = require('express'); // Necesario para mantener vivo el bot en Render
 
 // Servidor web simple para que Render no apague el bot por inactividad
@@ -13,19 +13,15 @@ app.listen(PORT, () => {
     console.log(`Servidor web interno corriendo en el puerto ${PORT}`);
 });
 
-// Inicializar el cliente de Discord
+// Inicializar el cliente de Discord (Sin intenciones de mensajes necesarias ya que no hay moderación por pings)
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent // Obligatorio para leer pings
+        GatewayIntentBits.GuildMessages
     ]
 });
 
-// ID del Owner para el sistema anti-ping
-const OWNER_ID = '1426990393802887290';
-
-// Definición de los Slash Commands (actualizado a /guiamm)
+// Definición de los Slash Commands (reglas, reglasstaff y guiamm)
 const commands = [
     new SlashCommandBuilder()
         .setName('reglas')
@@ -110,6 +106,63 @@ client.on('interactionCreate', async interaction => {
                 '**Todos los rangos deben cumplir estas reglas:**\n' +
                 '<a:luna:1545550535560659004> - Respetar a los miembros y al resto del staff.\n' +
                 '<a:luna:1545550535560659004> - No abusar de los permisos.\n' +
+                '<a:luna:1545550535560659004> - No filtrar información interna del staff.\n' +
+                '<a:luna:1545550535560659004> - No favorecer amigos/conocidos en reportes o postulaciones.\n' +
+                '<a:luna:1545550535560659004> - No discutir asuntos internos del staff en canales públicos.\n' +
+                '<a:luna:1545550535560659004> - Respetar siempre a los rangos superiores.\n' +
+                '<a:luna:1545550535560659004> - Si hay dudas contactar a un advisor.\n' +
+                '<a:luna:1545550535560659004> - Cualquier abuso de rango sera demote sin aviso.\n\n' +
+
+                '### <@&1542569421854351360> (Trial Helper)\n' +
+                '<:th:1542570952028852274> En período de prueba.\n' +
+                '**Qué hace:** Resolver dudas, orientar usuarios, tickets generales.\n' +
+                '**NO atiende:** Promociones, postulaciones, VIP, donaciones, reportes.\n\n' +
+
+                '### <@&1542499817840844923> (Helper)\n' +
+                'Ayuda a los miembros y colabora con tickets de consultas, alianzas y reportes (con superior).\n\n' +
+
+                '### <@&1542499752183070861> (Moderador)\n' +
+                'Mantiene el orden, supervisa canales y atiende reportes, alianzas, consultas y donaciones.\n\n' +
+
+                '📖 **Guía de Sanciones:** Cada staff usa palabra clave (ej. fyp, xos). Spam masivo = 2h | Spam = 1h | Raid = ban | nsfw = mute y warn.'
+            )
+            .setFooter({ text: 'Sky Bot • Panel del Staff' })
+            .setTimestamp();
+
+        await interaction.reply({ embeds: [embedStaff] });
+    }
+
+    else if (commandName === 'guiamm') {
+        const embedMM = new EmbedBuilder()
+            .setColor('#00FF99')
+            .setTitle('📦 ENTREGA DE MIDDLEMAN 📦')
+            .setDescription(
+                '🔄 **¿Vas a hacer un trade y necesitas un intermediario seguro?**\n\n' +
+                'Antes de comenzar, responde estas preguntas:\n\n' +
+                '👤 **Usuario de Roblox de los dos:**\n\n' +
+                '📋 **¿Cuál es el trade?**\n\n' +
+                '🤝 **¿Con quién tradearás?**\n\n' +
+                '💰 **¿Qué dejarán de propina al Middleman y quien la dará?**\n\n' +
+                'Nuestro Middleman se encargará de supervisar el intercambio para que ambas partes entreguen lo acordado correctamente. 🛡️'
+            )
+            .addFields(
+                { 
+                    name: '📌 Proceso:', 
+                    value: '1. El usuario que dará la propina se la entregará al middleman y ambas personas confirman el trade.\n2. El Middleman recibe los objetos del usuario 1.\n3. Se verifica que todo esté correcto.\n4. El usuario 2 le dará lo acordado al usuario 1.\n5. El usuario 1 confirma la entrega de lo acordado.\n6. El middleman le entrega lo acordado del usuario 1 al usuario 2 y deberá confirmar la entrega.\n7. Los dos usuarios deberán reseñar al middleman (si gustan) y reaccionar con el emoji de ✅ a la foto de proof para verificar.' 
+                },
+                { 
+                    name: '⚠️ Importante:', 
+                    value: 'Solo utiliza Middlemans oficiales del servidor, para eso mira sus roles. No confíes en personas que se hagan pasar por staff.\n\n🤝 **Trade seguro = trade tranquilo.**\n\nGracias por confiar en nuestro servidor. ♥️🐱' 
+                }
+            )
+            .setFooter({ text: 'Sky Bot • Sistema de Middleman' })
+            .setTimestamp();
+
+        await interaction.reply({ embeds: [embedMM] });
+    }
+});
+
+client.login(process.env.DISCORD_TOKEN);
                 '<a:luna:1545550535560659004> - No filtrar información interna del staff.\n' +
                 '<a:luna:1545550535560659004> - No favorecer amigos/conocidos en reportes o postulaciones.\n' +
                 '<a:luna:1545550535560659004> - No discutir asuntos internos del staff en canales públicos.\n' +
