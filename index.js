@@ -25,7 +25,7 @@ const client = new Client({
 // ID del Owner para el sistema anti-ping
 const OWNER_ID = '1426990393802887290';
 
-// Definición de los Slash Commands
+// Definición de los Slash Commands (actualizado a /guiamm)
 const commands = [
     new SlashCommandBuilder()
         .setName('reglas')
@@ -36,7 +36,7 @@ const commands = [
         .setDescription('Muestra el reglamento oficial y las funciones para los rangos del staff.'),
 
     new SlashCommandBuilder()
-        .setName('entregamm')
+        .setName('guiamm')
         .setDescription('Muestra la información y formulario para solicitar un Middleman.')
 ].map(command => command.toJSON());
 
@@ -136,7 +136,7 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply({ embeds: [embedStaff] });
     }
 
-    else if (commandName === 'entregamm') {
+    else if (commandName === 'guiamm') {
         const embedMM = new EmbedBuilder()
             .setColor('#00FF99')
             .setTitle('📦 ENTREGA DE MIDDLEMAN 📦')
@@ -189,50 +189,4 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-                '<a:luna:1545550535560659004> - Respetar siempre a los rangos superiores.\n' +
-                '<a:luna:1545550535560659004> - Si hay dudas contactar a un advisor.\n' +
-                '<a:luna:1545550535560659004> - Cualquier abuso de rango sera demote sin aviso.\n\n' +
-
-                '### <@&1542569421854351360> (Trial Helper)\n' +
-                '<:th:1542570952028852274> En período de prueba.\n' +
-                '**Qué hace:** Resolver dudas, orientar usuarios, tickets generales.\n' +
-                '**NO atiende:** Promociones, postulaciones, VIP, donaciones, reportes.\n\n' +
-
-                '### <@&1542499817840844923> (Helper)\n' +
-                'Ayuda a los miembros y colabora con tickets de consultas, alianzas y reportes (con superior).\n\n' +
-
-                '### <@&1542499752183070861> (Moderador)\n' +
-                'Mantiene el orden, supervisa canales y atiende reportes, alianzas, consultas y donaciones.\n\n' +
-
-                '📖 **Guía de Sanciones:** Cada staff usa palabra clave (ej. fyp, xos). Spam masivo = 2h | Spam = 1h | Raid = ban | nsfw = mute y warn.'
-            )
-            .setFooter({ text: 'Sky Bot • Panel del Staff' })
-            .setTimestamp();
-
-        await interaction.reply({ embeds: [embedStaff] });
-    }
-});
-
-// Evento Anti-Ping al Owner y Mute automático de 10 segundos
-client.on('messageCreate', async (message) => {
-    if (message.author.bot || !message.guild) return;
-
-    if (message.mentions.has(OWNER_ID)) {
-        try {
-            await message.reply('¡Hey, No hagas ping al owner!');
-
-            const member = message.member;
-
-            if (!message.guild.members.me.permissions.has(PermissionsBitField.Flags.ModerateMembers)) return;
-            if (!member.moderatable) return;
-
-            // Timeout de 10 segundos
-            await member.timeout(10 * 1000, 'Hacer ping al owner del servidor');
-
-        } catch (error) {
-            console.error('Error al intentar mutear:', error);
-        }
-    }
-});
-
-client.login(process.env.DISCORD_TOKEN);
+    
